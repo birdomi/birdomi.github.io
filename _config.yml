@@ -1,0 +1,9 @@
+title: ETRI Robot Foundation Model Lab
+description: Building Physical Intelligence with Foundation Models
+theme: jekyll-theme-primer # 혹은 jekyll-theme-cayman 등 원하는 테마
+
+collections:
+  news:
+    output: true
+  research:
+    output: true
