@@ -127,4 +127,77 @@ layout: null
         <p class="welcome-text">
             ETRI 로봇 파운데이션 모델 연구실에 오신 것을 환영합니다.<br>
             우리는 로봇이 시각, 언어, 행동을 통합적으로 이해하고<br>
-            복잡한 환경에서 임무를 수행할 수 있도록 돕는 차세대 AI 기술을 연구합니다
+            복잡한 환경에서 임무를 수행할 수 있도록 돕는 차세대 AI 기술을 연구합니다.
+        </p>
+    </div>
+
+    <section class="lab-section">
+        <h2>Latest News</h2>
+        <div class="news-list">
+            {% if site.news.size > 0 %}
+                {% assign sorted_news = site.news | sort: 'date' | reverse %}
+                {% for item in sorted_news limit:3 %}
+                <div class="news-item">
+                    <span class="news-date">{{ item.date | date: "%Y.%m.%d" }}</span>
+                    <span class="news-content"><a href="{{ item.url }}">{{ item.title }}</a></span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #999;">등록된 뉴스가 없습니다. _news 폴더에 파일을 추가해주세요.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="lab-section">
+        <h2>Research Projects</h2>
+        <div class="research-container">
+            {% if site.research.size > 0 %}
+                {% for project in site.research %}
+                <div class="research-card">
+                    <div class="res-image">
+                        <img src="{{ project.thumbnail | default: 'https://via.placeholder.com/400x250/e0e0e0/aaa?text=Research' }}" alt="{{ project.title }}">
+                    </div>
+                    <div class="res-info">
+                        <span class="res-tag">{{ project.category | default: 'Research' }}</span>
+                        <h3>{{ project.title }}</h3>
+                        <p class="res-authors">{{ project.author }}</p>
+                        <div class="res-links">
+                            <a href="{{ project.url }}" class="primary">View Project</a>
+                            {% if project.paper_url %}<a href="{{ project.paper_url }}" class="outline">Paper</a>{% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #999;">등록된 연구가 없습니다. _research 폴더에 파일을 추가해주세요.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="lab-section">
+        <h2>Members</h2>
+        <div class="members-grid">
+            {% if site.members.size > 0 %}
+                {% assign sorted_members = site.members | sort: 'priority' %}
+                {% for member in sorted_members %}
+                <div class="member-card">
+                    <img src="{{ member.image | default: 'https://via.placeholder.com/150?text=Member' }}" class="member-img" alt="{{ member.name }}">
+                    <div class="member-name">{{ member.name }}</div>
+                    <span class="member-role">{{ member.role }}</span>
+                    <p class="member-desc">{{ member.description }}</p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #999; width: 100%;">등록된 멤버가 없습니다. _members 폴더에 md 파일을 추가해주세요.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <footer style="text-align: center; margin-top: 50px; border-top: 1px solid #eee; padding-top: 30px; color: #888; font-size: 0.8rem;">
+        &copy; 2026 ETRI Robot Foundation Model Research Section. All rights reserved.
+    </footer>
+
+</div>
+
+</body>
+</html>
