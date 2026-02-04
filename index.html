@@ -1,124 +1,75 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ETRI RFM research lab</title>
-    <style>
-        :root {
-            --main-color: #76b900; /* NVIDIA 느낌의 포인트 컬러 */
-            --text-dark: #222;
-            --text-light: #666;
-            --bg-light: #f9f9f9;
-        }
+---
+layout: default
+---
 
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Navigation */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 10%;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            background: white;
-            z-index: 100;
-        }
-
-        nav .logo { font-weight: 800; font-size: 1.2rem; cursor: pointer; }
-        nav .menu a { text-decoration: none; color: var(--text-dark); margin-left: 2rem; font-weight: 500; }
-
-        /* Hero Section */
-        header { padding: 4rem 10%; background: var(--bg-light); }
-        header h1 { font-size: 2.5rem; margin-bottom: 1rem; }
-        header p { max-width: 800px; font-size: 1.1rem; color: var(--text-light); }
-
-        /* Featured Section (Grid) */
-        section { padding: 4rem 10%; }
-        h2 { border-bottom: 2px solid var(--main-color); display: inline-block; margin-bottom: 2rem; }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s;
-            border: 1px solid #eee;
-        }
-
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .card img { width: 100%; height: 200px; object-fit: cover; background: #ddd; }
-        .card-body { padding: 1.5rem; }
-        .card-body h3 { margin: 0 0 0.5rem 0; font-size: 1.2rem; }
-        .card-body p { font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem; }
-
-        /* Publication List */
-        .pub-list { list-style: none; padding: 0; }
-        .pub-item { margin-bottom: 1.5rem; padding-left: 1rem; border-left: 3px solid #eee; }
-        .pub-title { font-weight: 600; display: block; }
-        .pub-authors { font-size: 0.9rem; color: var(--text-light); }
-        .pub-venue { font-style: italic; color: var(--main-color); font-size: 0.9rem; }
-
-        @media (max-width: 768px) {
-            nav { flex-direction: column; padding: 1rem; }
-            .menu { margin-top: 1rem; }
-            header { padding: 2rem 5%; }
-            section { padding: 2rem 5%; }
-        }
-    </style>
-</head>
-<body>
-
-    <nav>
-        <div class="logo">ETRI Robot Foundation Model Lab</div>
-        <div class="menu">
-            <a href="#projects">Projects</a>
-            <a href="#publications">Publications</a>
-            <a href="https://github.com/내아이디">GitHub</a>
+<section id="news" class="section">
+    <h2>Latest News</h2>
+    <div class="news-list">
+        {% assign sorted_news = site.news | sort: 'date' | reverse %}
+        {% for item in sorted_news limit:3 %}
+        <div class="news-item">
+            <span class="news-date">{{ item.date | date: "%Y.%m.%d" }}</span>
+            <span class="news-content">
+                <a href="{{ item.url }}">{{ item.title }}</a>
+            </span>
         </div>
-    </nav>
+        {% endfor %}
+    </div>
+</section>
 
-    <header>
-        <h1>Robot Foundation Model Research</h1>
-        <p>우리는 로봇의 물리적 지능을 확장하기 위한 기초 모델을 연구합니다. 특히 Vision-Language-Action (VLA) 모델의 복잡한 환경에서의 로봇 조작 능력을 향상시키는 것에 집중하고 있습니다.</p>
-    </header>
+<hr>
 
-    <section id="projects">
-        <h2>Highlighted Projects</h2>
-        <div class="grid">
-            <div class="card">
-                <img src="https://via.placeholder.com/400x225" alt="Project 1">
-                <div class="card-body">
-                    <h3>VLA with Tactile Feedback</h3>
-                    <p>시각 정보와 촉각 피드백을 결합한 차세대 로봇 제어 프레임워크 연구입니다.</p>
-                </div>
+<section id="research" class="section">
+    <h2>Research Projects</h2>
+    <div class="research-container">
+        {% for project in site.research %}
+        <div class="research-card">
+            <div class="res-image">
+                <img src="{{ project.thumbnail | default: '/assets/images/default-thumb.jpg' }}" alt="{{ project.title }}">
             </div>
-            <div class="card">
-                <img src="https://via.placeholder.com/400x225" alt="Project 2">
-                <div class="card-body">
-                    <h3>Pseudo-Tactile Generation</h3>
-                    <p>기존 데이터셋에 가상의 촉각 정보를 생성하여 학습 데이터를 확장하는 방법론을 제안합니다.</p>
+            <div class="res-info">
+                <span class="res-tag">{{ project.category }}</span>
+                <h3>{{ project.title }}</h3>
+                <p class="res-authors">{{ project.author }}</p>
+                <p class="res-desc">{{ project.description | truncate: 150 }}</p>
+                
+                <div class="res-links">
+                    <a href="{{ project.url }}" class="btn-sm">Project Page</a>
+                    {% if project.paper_url %}
+                    <a href="{{ project.paper_url }}" class="btn-sm outline">Paper</a>
+                    {% endif %}
+                    {% if project.code_url %}
+                    <a href="{{ project.code_url }}" class="btn-sm outline">Code</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
-    </section>
+        {% endfor %}
+    </div>
+</section>
 
-    <section id="publications">
-        <h2>Selected Publications</h2>
-        <div class="pub-list">
-            <div class="pub-item">
-                <span class="pub-title">Scaling Robot Learning with Vision-to-Tactile Models</span>
-                <span class="pub-authors">Your Name, Co-author, and
+<style>
+    /* 리스트를 정갈하게 만들기 위한 스타일 */
+    .section { padding: 40px 0; }
+    .news-item { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
+    .news-date { font-weight: bold; color: #0054a6; margin-right: 15px; }
+
+    .research-container { display: flex; flex-direction: column; gap: 40px; margin-top: 30px; }
+    .research-card { display: flex; gap: 30px; align-items: flex-start; }
+    .res-image { flex: 0 0 280px; height: 160px; border-radius: 8px; overflow: hidden; background: #f0f0f0; }
+    .res-image img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .res-tag { font-size: 0.8rem; background: #eef5ff; color: #0054a6; padding: 2px 8px; border-radius: 4px; }
+    .res-info h3 { margin: 10px 0; font-size: 1.4rem; color: #333; }
+    .res-authors { font-size: 0.9rem; color: #666; margin-bottom: 10px; font-style: italic; }
+    .res-desc { color: #555; font-size: 0.95rem; margin-bottom: 20px; }
+
+    .btn-sm { text-decoration: none; padding: 6px 12px; border-radius: 4px; font-size: 0.85rem; background: #0054a6; color: white; margin-right: 5px; }
+    .btn-sm.outline { background: white; color: #0054a6; border: 1px solid #0054a6; }
+    .btn-sm:hover { opacity: 0.8; }
+
+    @media (max-width: 768px) {
+        .research-card { flex-direction: column; }
+        .res-image { flex: 0 0 auto; width: 100%; }
+    }
+</style>
